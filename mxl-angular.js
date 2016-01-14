@@ -97,6 +97,10 @@ angular.module('mxl', [])
                             mandatoryParameter++;
                         }
                     }
+
+                    $scope.intermediateResults[index].config.unfilledMandatoryParameters = mandatoryParameter;
+                    $scope.intermediateResults[index].config.parameters = Array.apply(null, Array(length)).map(function () {});
+
                     if (mandatoryParameter === 0) {
                         var query = generateQuery(index, -1);
                         if ($scope.wizard) {
@@ -115,9 +119,6 @@ angular.module('mxl', [])
                         // set the codemirror content
                         $scope.codemirror.setValue(query);
                     }
-                    $scope.intermediateResults[index].config.unfilledMandatoryParameters = mandatoryParameter;
-                    $scope.intermediateResults[index].config.parameters = Array.apply(null, Array(length)).map(function () {
-                    });
                 }
             }
             // when a parameter is passed
@@ -233,7 +234,8 @@ angular.module('mxl', [])
                     $scope.intermediateResults[resIndex + 1].wizardError = result.message;
                     return true;
                 }else {
-                    if ($scope.intermediateResults[resIndex + 1].wizardError != null) {
+                    if ($scope.intermediateResults[resIndex + 1] != null &&
+                        $scope.intermediateResults[resIndex + 1].wizardError != null) {
                         $scope.intermediateResults[resIndex + 1].wizardError = null
                     }
                     if($scope.intermediateResults[resIndex + 1] != null){
@@ -255,7 +257,8 @@ angular.module('mxl', [])
                     $scope.intermediateResults[index + 1] = {};
                     $scope.intermediateResults[index + 1].wizardError = result.message;
                 }else { // no error
-                    if($scope.intermediateResults[index + 1].wizardError != null){
+                    if($scope.intermediateResults[index + 1] != null &&
+                        $scope.intermediateResults[index + 1].wizardError != null){
                         $scope.intermediateResults[index + 1].wizardError = null
                     }
                     $scope.intermediateResults[index + 1] = {
