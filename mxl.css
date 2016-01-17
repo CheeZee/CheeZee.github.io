@@ -210,6 +210,8 @@
 
 .selection, #pro-editor{
     background-color: #eee;
+    padding-top: 1px;
+    padding-bottom: 1px;
 }
 
 .selection{
@@ -247,24 +249,24 @@
 }
 
 #selectedEntity{
-    position: relative;
-    background-color: #666;
-    padding: 5px 5px;
+    background-color: #eee;
 }
 
 #selectedEntity h4{
-    color: WHITE;
+    color: #222222;
 }
 
-#selectedEntity span {
-    color: #9d9d9d;
-    position: absolute;
-    top: 2px;
-    right: 5px;
-    font-size: 5px;
+#changeEntity {
+    font-size: 25px;
+    background-color: #337ab7;
+    height: 39px;
 }
 
-#selectedEntity span:hover{
+#changeEntity span {
+    vertical-align: middle;
+}
+
+#changeEntity:hover{
     cursor: pointer;
 }
 
@@ -305,4 +307,13 @@
     vertical-align: middle;
     line-height: 38px;
     margin-left: 0;
+}
+
+.step {
+    background-color: #ddd;
+    margin: 10px;
+}
+
+.step-number {
+
 }

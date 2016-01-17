@@ -55,8 +55,17 @@ angular.module('mxl', [])
                     $scope.wizardQuery = ["find " + $scope.selectedEntity.name];
                     $scope.wizard({expression: $scope.wizardQuery[0]}).then(function(result){
                         $scope.intermediateResults = [{type: result.type.fullname, preview: result.value}];
+                        // initialize the first set of functions
+                        if($scope.wizardMethodAutocompletion && $scope.intermediateResults != null){
+                            $scope.wizardMethodAutocompletion({restrict: $scope.intermediateResults[0].type}).then(function(result){
+                                console.log(result.memberFunctions);
+                                $scope.intermediateResults[0].functions = result.memberFunctions;
+                            });
+                        }
+                        $scope.intermediateResults[0].config = {};
                     });
                 }
+
                 // set the codemirror content
                 $scope.codemirror.setValue( $scope.wizardQuery[0]);
              };
@@ -241,6 +250,13 @@ angular.module('mxl', [])
                     if($scope.intermediateResults[resIndex + 1] != null){
                         $scope.intermediateResults[resIndex + 1].type = result.type.fullname;
                         $scope.intermediateResults[resIndex + 1].preview = result.value;
+                        // generate the next function set
+                        if($scope.wizardMethodAutocompletion && $scope.intermediateResults != null){
+                            $scope.wizardMethodAutocompletion({restrict: $scope.intermediateResults[resIndex + 1].type}).then(function(result){
+                                console.log(result.memberFunctions);
+                                $scope.intermediateResults[resIndex + 1].functions = result.memberFunctions;
+                            });
+                        }
                     }
                     return false;
                 }
@@ -270,7 +286,14 @@ angular.module('mxl', [])
                     } else {
                         $scope.endOfWizard = false;
                     }
-
+                    // generate the next function set
+                    if($scope.wizardMethodAutocompletion && $scope.intermediateResults != null){
+                        $scope.wizardMethodAutocompletion({restrict: $scope.intermediateResults[index + 1].type}).then(function(result){
+                            console.log(result.memberFunctions);
+                            $scope.intermediateResults[index + 1].functions = result.memberFunctions;
+                        });
+                    }
+                    $scope.intermediateResults[index + 1].config = {};
                 }
             }
             /*
