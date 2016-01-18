@@ -93,6 +93,9 @@ angular.module('mxl', [])
                     // get the function
                     var input = document.querySelector("#method-"+index);
                     console.log(input.value);
+                    if($scope.intermediateResults[index].config === null){
+                        $scope.intermediateResults[index].config = {};
+                    }
                     for(var i = 0;  i < $scope.intermediateResults[index].functions.length; i++){
                         if($scope.intermediateResults[index].functions[i].name === input.value){
                             $scope.intermediateResults[index].config.selectedFunction = $scope.intermediateResults[index].functions[i];
