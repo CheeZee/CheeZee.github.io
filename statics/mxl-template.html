@@ -21,16 +21,16 @@
                         <div class="row row-margin">
                             <div class="col-md-10 col-md-offset-1">
                                 <div class="input-group">
-                                    <input id="entity" list="entities" class="form-control">
+                                    <input id="entity" list="entities" class="form-control" ng-keypress="selectEntity($event)">
                                     <datalist id="entities">
                                         <option ng-repeat="entity in entities" value="{{entity.name}}">
                                     </datalist>
                                     <div class="input-group-btn">
-                                        <button class="btn btn-primary" type="button" ng-click="selectEntity()">
-                                            Select<i class="glyphicon glyphicon-ok"></i>
+                                        <button class="btn btn-primary" type="button" ng-click="selectEntity(null)">
+                                            <i class="glyphicon glyphicon-ok"></i>
                                         </button>
                                         <button class="btn btn-primary" type="button" ng-click="cancelChange()" ng-show="changingEntity">
-                                            Cancel<i class="glyphicon glyphicon-remove"></i>
+                                            <i class="glyphicon glyphicon-remove"></i>
                                         </button>
                                     </div>
                                 </div>
@@ -41,12 +41,17 @@
                 <div class="selection" ng-hide="selectedEntity == null || changingEntity">
                     <div class="step">
                         <div class="row row-margin">
-                            <div id="selectedEntity" class="col-md-8 col-md-offset-1">
-                                <h4><b>{{selectedEntity.name}}</b></h4>
+                            <div class="col-md-10 col-md-offset-1">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" value="{{selectedEntity.name}}" readonly="readonly">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-primary" type="button"  ng-click="changeEntity()">
+                                            <i class="glyphicon glyphicon-remove"></i>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-                            <div id="changeEntity" class="col-md-2">
-                                <span ng-click="changeEntity()"><i class="glyphicon glyphicon-remove"></i></span>
-                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -61,6 +66,7 @@
                         <img class="add-button" alt="Add a function" title="Add a function"
                              src="statics/images/add-button.png" ng-click="addFunction()">
                     </div>-->
+
                 </div>
             </div>
         </div>

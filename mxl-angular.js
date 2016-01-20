@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-angular.module('mxl', [])
+angular.module('mxl', ['ui.codemirror'])
 .constant("mxlModes", {
     expression: "expression",
     type: "type",
@@ -38,36 +38,38 @@ angular.module('mxl', [])
             * Below are the wizard related functions
             */
             // select the entity
-            $scope.selectEntity = function(){
-                // get the selected entity
-                var e = document.querySelector('#entity');
-                console.log(e.value);
-                for(var i = 0; i < $scope.entities.length; i++){
-                    if($scope.entities[i].name === e.value){
-                        $scope.selectedEntity = $scope.entities[i];
-                        $scope.changingEntity = false;
-                        break;
-                    }
-                }
-
-                // initialize the intermediate result array
-                if($scope.wizard){
-                    $scope.wizardQuery = ["find " + $scope.selectedEntity.name];
-                    $scope.wizard({expression: $scope.wizardQuery[0]}).then(function(result){
-                        $scope.intermediateResults = [{type: result.type.fullname, preview: result.value}];
-                        // initialize the first set of functions
-                        if($scope.wizardMethodAutocompletion && $scope.intermediateResults != null){
-                            $scope.wizardMethodAutocompletion({restrict: $scope.intermediateResults[0].type}).then(function(result){
-                                console.log(result.memberFunctions);
-                                $scope.intermediateResults[0].functions = result.memberFunctions;
-                            });
+            $scope.selectEntity = function($event){
+                if($event === null || $event.keyCode === 13){
+                    // get the selected entity
+                    var e = document.querySelector('#entity');
+                    console.log(e.value);
+                    for(var i = 0; i < $scope.entities.length; i++){
+                        if($scope.entities[i].name === e.value){
+                            $scope.selectedEntity = $scope.entities[i];
+                            $scope.changingEntity = false;
+                            break;
                         }
-                        $scope.intermediateResults[0].config = {};
-                    });
-                }
+                    }
 
-                // set the codemirror content
-                $scope.codemirror.setValue( $scope.wizardQuery[0]);
+                    // initialize the intermediate result array
+                    if($scope.wizard){
+                        $scope.wizardQuery = ["find " + $scope.selectedEntity.name];
+                        $scope.wizard({expression: $scope.wizardQuery[0]}).then(function(result){
+                            $scope.intermediateResults = [{type: result.type.fullname, preview: result.value}];
+                            // initialize the first set of functions
+                            if($scope.wizardMethodAutocompletion && $scope.intermediateResults != null){
+                                $scope.wizardMethodAutocompletion({restrict: $scope.intermediateResults[0].type}).then(function(result){
+                                    console.log(result.memberFunctions);
+                                    $scope.intermediateResults[0].functions = result.memberFunctions;
+                                });
+                            }
+                            $scope.intermediateResults[0].config = {};
+                        });
+                    }
+
+                    // set the codemirror content
+                    $scope.codemirror.setValue( $scope.wizardQuery[0]);
+                }
              };
             $scope.changeEntity = function(){
                 $scope.changingEntity = true;
@@ -135,7 +137,8 @@ angular.module('mxl', [])
             }
             // when a parameter is passed
             $scope.setParameter = function($event, resIndex, paraIndex, isOptional){
-                if($event.keyCode === 13) {
+                console.log($event.keyCode);
+                if($event.keyCode === 10) {
                     if (isOptional == false) {
                         if ($scope.intermediateResults[resIndex].config.parameters[paraIndex] != "") {
                             if($scope.intermediateResults[resIndex].config.unfilledMandatoryParameters > 0) {
@@ -299,6 +302,24 @@ angular.module('mxl', [])
                     $scope.intermediateResults[index + 1].config = {};
                 }
             }
+
+            $scope.paraCMOptions = {
+                autofocus: true,
+                placeholder: 'Please press Ctrl+Enter to confirm the input',
+                lineWrapping: true,
+                matchBrackets: true,
+                autoCloseBrackets: true,
+                highlightSelectionMatches: { showToken: /\w/ },
+                viewportMargin: Infinity,
+                readOnly: false,
+                mode: 'mxl',
+                gutters: ["CodeMirror-lint-markers"],
+                lint: true,
+                onlyLimitedHints: $scope.mode !== mxlModes.expression,
+                debounce: $scope.debounce ? $scope.debounce : 2000,
+                theme: 'mxl',
+                extraKeys: {}
+            };
             /*
             * Above are the wizard related functions
             */
@@ -559,8 +580,6 @@ angular.module('mxl', [])
         templateUrl: 'statics/mxl-wizard-methods.html',
         require: "^mxlExpression",
         scope: false,
-        link: function(scope, element, attrs){
-
-        }
+        link: function($scope, $element, $attrs){}
     }
 });
