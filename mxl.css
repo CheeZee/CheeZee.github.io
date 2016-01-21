@@ -280,7 +280,8 @@
     padding: 0;
 }
 .arrow{
-    background-color: #5cb85c;
+    /*background-color: #5cb85c;*/
+    background-color: #bbb;
     height: 37px;
     text-align: center;
     width: 39px;
