@@ -10,8 +10,8 @@
         <div ng-if="result.wizardError == null">
 
             <div class="col-md-12 intermediate">
-                <div class="panel panel-default center-block intermediate">
-                    <div class="panel-heading">
+                <div class="panel panel-default intermediate">
+                    <div class="panel-heading  center-block">
                         <h3 class="panel-title">
 
                             Data Type: <b>{{ result.type }}</b>
@@ -23,7 +23,7 @@
                         </h3>
 
                     </div>
-                    <div id="preview-{{$index}}" class="panel-collapse collapse">
+                    <div id="preview-{{$index}}" class="panel-collapse collapse text-left">
                         <div class="panel-body">
                             <div ng-if="result.type.lastIndexOf('Sequence', 0) === 0">
                                 <ul>
