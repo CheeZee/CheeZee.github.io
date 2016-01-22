@@ -1,38 +1,40 @@
 <div class="step">
     <div class="row row-margin">
-        <div class="col-md-12">
-            <input id="method-{{$index}}" class="form-control" list="functions-{{$index}}"
-                   ng-keypress="selectFunction($event, $index)">
-            <datalist id="functions-{{$index}}">
-                <option ng-repeat="function in result.functions" value="{{function.name}}"></option>
-            </datalist>
+        <div class="col-md-1 step-number" ng-class="{'unifinished' :!result.config.selectedFunction }">
+            <p>{{$index+2}}</p>
         </div>
-    </div>
-    <div id="parameters-{{$index}}" ng-repeat="parameter in result.config.selectedFunction.parameters">
-        <div class="row row-margin" ng-if="parameter.isOptional == false" >
-            <div class="col-md-12">
-                <div class="form-group" ng-class="{'has-error' : !result.config.parameters[$index] }" >
-                    <label class="control-label" ><b>Mandatory</b> Parameter: {{parameter.name}}</label>
-                    <ui-codemirror id="parameter-{{$index}}" ui-codemirror-opts="paraCMOptions"
-                                   ng-keypress="setParameter($event, intermediateResults.indexOf(result), $index, parameter.isOptional)"
-                                   ng-model="result.config.parameters[$index]"></ui-codemirror>
-                    <!--<input id="parameter-{{$index}}" type="text" class="form-control" placeholder="Name: {{parameter.name}}, Type: {{parameter.type}}"
-                           ng-model="result.config.parameters[$index]"
-                           ng-keypress="setParameter($event, intermediateResults.indexOf(result), $index, parameter.isOptional)">-->
+        <div class="col-md-11 back-padding">
+            <div class="">
+                <div class="">
+                    <input id="method-{{$index}}" class="form-control" list="functions-{{$index}}"
+                           ng-keypress="selectFunction($event, $index)">
+                    <datalist id="functions-{{$index}}">
+                        <option ng-repeat="function in result.functions" value="{{function.name}}"></option>
+                    </datalist>
                 </div>
-
             </div>
-        </div>
-        <div class="row row-margin" ng-if="parameter.isOptional == true">
-            <div class="col-md-12">
-                <div class="form-group" >
-                    <label class="control-label" ><b>Optional</b> Parameter: {{parameter.name}}</label>
-                    <ui-codemirror id="parameter-{{$index}}" ui-codemirror-opts="paraCMOptions"
-                                   ng-keypress="setParameter($event, intermediateResults.indexOf(result), $index, parameter.isOptional)"
-                                   ng-model="result.config.parameters[$index]"></ui-codemirror>
-                    <!--<input id="parameter-{{$index}}" type="text" class="form-control" placeholder="Name: {{parameter.name}}, Type: {{parameter.type}}"
-                           ng-model="result.config.parameters[$index]"
-                           ng-keypress="setParameter($event, intermediateResults.indexOf(result), $index, parameter.isOptional)">-->
+            <div id="parameters-{{$index}}" ng-repeat="parameter in result.config.selectedFunction.parameters">
+                <div ng-if="parameter.isOptional == false" >
+                        <div ng-class="{'has-error' : !result.config.parameters[$index] }" >
+                            <label class="control-label" ><b>Mandatory</b> Parameter: {{parameter.name}}</label>
+                            <ui-codemirror id="parameter-{{$index}}" ui-codemirror-opts="paraCMOptions"
+                                           ng-keypress="setParameter($event, intermediateResults.indexOf(result), $index, parameter.isOptional)"
+                                           ng-model="result.config.parameters[$index]"></ui-codemirror>
+                            <!--<input id="parameter-{{$index}}" type="text" class="form-control" placeholder="Name: {{parameter.name}}, Type: {{parameter.type}}"
+                                   ng-model="result.config.parameters[$index]"
+                                   ng-keypress="setParameter($event, intermediateResults.indexOf(result), $index, parameter.isOptional)">-->
+                        </div>
+                    </div>
+                </div>
+                <div ng-if="parameter.isOptional == true">
+                            <label class="control-label" ><b>Optional</b> Parameter: {{parameter.name}}</label>
+                            <ui-codemirror id="parameter-{{$index}}" ui-codemirror-opts="paraCMOptions"
+                                           ng-keypress="setParameter($event, intermediateResults.indexOf(result), $index, parameter.isOptional)"
+                                           ng-model="result.config.parameters[$index]"></ui-codemirror>
+                            <!--<input id="parameter-{{$index}}" type="text" class="form-control" placeholder="Name: {{parameter.name}}, Type: {{parameter.type}}"
+                                   ng-model="result.config.parameters[$index]"
+                                   ng-keypress="setParameter($event, intermediateResults.indexOf(result), $index, parameter.isOptional)">-->
+
                 </div>
             </div>
         </div>

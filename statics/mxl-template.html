@@ -4,10 +4,10 @@
         <nav class="nav navbar-nav">
             <ul class="nav nav-pills nav-stacked" id="tabs" role="tablist">
                 <li role="presentation" class="active">
-                    <a href="#pro-editor" data-toggle="pill"><span class="glyphicon glyphicon-pencil"></span></a>
+                    <a href="#pro-editor" data-toggle="pill"><i class="fa fa-code fa-lg"></i></a>
                 </li>
                 <li role="presentation">
-                    <a href="#wizard" data-toggle="pill"><span class="glyphicon glyphicon-wrench"></span></a>
+                    <a href="#wizard" data-toggle="pill"><i class="fa fa-magic fa-lg"></i></a>
                 </li>
             </ul>
         </nav>
@@ -18,8 +18,11 @@
             <div id="wizard" class="tab-pane fade">
                 <div class="selection" ng-show="selectedEntity == null || changingEntity">
                     <div class="step">
-                        <div class="row row-margin">
-                            <div class="col-md-10 col-md-offset-1">
+                        <div class="row row-md-height row-margin">
+                            <div class="col-md-1 col-md-height step-number unfinished">
+                                <p>1</p>
+                            </div>
+                            <div class="col-md-11 back-padding">
                                 <div class="input-group">
                                     <input id="entity" list="entities" class="form-control" ng-keypress="selectEntity($event)">
                                     <datalist id="entities">
@@ -40,8 +43,11 @@
                 </div>
                 <div class="selection" ng-hide="selectedEntity == null || changingEntity">
                     <div class="step">
-                        <div class="row row-margin">
-                            <div class="col-md-10 col-md-offset-1">
+                        <div class="row row-md-height row-margin">
+                            <div class="col-md-1 col-md-height step-number">
+                                <p>1</p>
+                            </div>
+                            <div class="col-md-11 back-padding">
                                 <div class="input-group">
                                     <input type="text" class="form-control" value="{{selectedEntity.name}}" readonly="readonly">
                                     <div class="input-group-btn">
