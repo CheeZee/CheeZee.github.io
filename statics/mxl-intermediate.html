@@ -1,20 +1,16 @@
 <div class="row intermediate selection">
-    <div>
     <div ng-if="result.wizardError == null">
         <div class="col-md-1 col-md-offset-1 inter-info">
             <div class="arrow pull-right">
-                <span><i class="glyphicon glyphicon-arrow-down"></i></span>
+                <span><i class="fa fa-long-arrow-down fa-lg"></i></span>
             </div>
         </div>
-        <div class="col-md-10 intermediate">
+        <div class="col-md-10 row-margin">
             <div class="panel panel-default intermediate">
                 <div class="panel-heading">
                     <h3 class="panel-title">
-
                         {{ result.type }}
-                        <a class="pull-right collapsed" data-toggle="collapse" data-target="#preview-{{$index}}">
-
-                        </a>
+                        <a class="pull-right collapsed" data-toggle="collapse" data-target="#preview-{{$index}}"></a>
                     </h3>
                 </div>
                 <div id="preview-{{$index}}" class="panel-collapse collapse">
