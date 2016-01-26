@@ -24,15 +24,15 @@
                             </div>
                             <div class="col-md-11 back-padding">
                                 <div class="input-group">
-                                    <input id="entity" list="entities" class="form-control" ng-keypress="selectEntity($event)">
+                                    <input id="entity" ng-model="entityName" list="entities" class="form-control" ng-keypress="selectEntity($event)">
                                     <datalist id="entities">
                                         <option ng-repeat="entity in entities" value="{{entity.name}}">
                                     </datalist>
                                     <div class="input-group-btn">
-                                        <button class="btn btn-primary" type="button" ng-click="selectEntity(null)">
+                                        <button class="btn btn-primary" type="button" ng-click="selectEntity(null)" ng-disabled="entityName == null">
                                             <i class="glyphicon glyphicon-ok"></i>
                                         </button>
-                                        <button class="btn btn-primary" type="button" ng-click="cancelChange()" ng-show="changingEntity">
+                                        <button class="btn btn-primary" type="button" ng-click="cancelChange()" ng-if="changingEntity">
                                             <i class="glyphicon glyphicon-remove"></i>
                                         </button>
                                     </div>
@@ -52,7 +52,7 @@
                                     <input type="text" class="form-control" value="{{selectedEntity.name}}" readonly="readonly">
                                     <div class="input-group-btn">
                                         <button class="btn btn-primary" type="button"  ng-click="changeEntity()">
-                                            <i class="glyphicon glyphicon-remove"></i>
+                                            <i class="fa fa-pencil-square-o fa-lg"></i>
                                         </button>
                                     </div>
                                 </div>

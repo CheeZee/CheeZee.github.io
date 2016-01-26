@@ -20,6 +20,7 @@ angular.module('mxl', ['ui.codemirror'])
                 mode: '@mxlMode',
                 validateMxl: '&mxlValidate',
                 // below are the attributes for the wizard
+                entityName: '@',
                 enableWizard: '=enableWizard',
                 entities: '=mxlEntities',
                 changingEntity: '@',
@@ -41,10 +42,9 @@ angular.module('mxl', ['ui.codemirror'])
             $scope.selectEntity = function($event){
                 if($event === null || $event.keyCode === 13){
                     // get the selected entity
-                    var e = document.querySelector('#entity');
-                    console.log(e.value);
+                    console.log($scope.entityName);
                     for(var i = 0; i < $scope.entities.length; i++){
-                        if($scope.entities[i].name === e.value){
+                        if($scope.entities[i].name === $scope.entityName){
                             $scope.selectedEntity = $scope.entities[i];
                             $scope.changingEntity = false;
                             break;
@@ -245,7 +245,6 @@ angular.module('mxl', ['ui.codemirror'])
             function updateIntermediateResult(result, resIndex){
                 console.log(result);
                 if(result.statusCode >= 400) {
-                    $scope.intermediateResults[resIndex + 1] = {};
                     $scope.intermediateResults[resIndex + 1].wizardError = result.message;
                     return true;
                 }else {
