@@ -314,10 +314,10 @@ angular.module('mxl', ['ui.codemirror'])
                 mode: 'mxl',
                 gutters: ["CodeMirror-lint-markers"],
                 lint: true,
-                onlyLimitedHints: $scope.mode !== mxlModes.expression,
-                debounce: $scope.debounce ? $scope.debounce : 2000,
                 theme: 'mxl',
-                extraKeys: {}
+                extraKeys: {
+                    "Ctrl-Space": "autocomplete"
+                }
             };
             /*
             * Above are the wizard related functions
