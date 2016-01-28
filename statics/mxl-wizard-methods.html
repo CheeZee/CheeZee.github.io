@@ -9,14 +9,17 @@
                     <input id="method-{{$index}}" class="form-control" list="functions-{{$index}}"
                            ng-keypress="selectFunction($event, $index)">
                     <datalist id="functions-{{$index}}">
-                        <option ng-repeat="function in result.functions" value="{{function.name}}"></option>
+                        <option ng-repeat="function in result.functions" value="{{function.name}}">
+                            <a href="" title="{{function.description}}"> ? </a></option>
                     </datalist>
                 </div>
             </div>
             <div id="parameters-{{$index}}" ng-repeat="parameter in result.config.selectedFunction.parameters">
                 <div ng-if="parameter.isOptional == false" >
                         <div ng-class="{'has-error' : !result.config.parameters[$index] }" >
+                            <div align="left">
                             <label class="control-label" ><b>Mandatory</b> Parameter: {{parameter.name}}</label>
+                                </div>
                             <ui-codemirror id="parameter-{{$index}}" ui-codemirror-opts="paraCMOptions"
                                            ng-keypress="setParameter($event, intermediateResults.indexOf(result), $index, parameter.isOptional)"
                                            ng-model="result.config.parameters[$index]"></ui-codemirror>
@@ -27,7 +30,9 @@
                     </div>
                 </div>
                 <div ng-if="parameter.isOptional == true">
-                            <label class="control-label" ><b>Optional</b> Parameter: {{parameter.name}}</label>
+                    <div align="left">
+                    <label class="control-label" ><b>Optional</b> Parameter: {{parameter.name}}</label>
+                    </div>
                             <ui-codemirror id="parameter-{{$index}}" ui-codemirror-opts="paraCMOptions"
                                            ng-keypress="setParameter($event, intermediateResults.indexOf(result), $index, parameter.isOptional)"
                                            ng-model="result.config.parameters[$index]"></ui-codemirror>
