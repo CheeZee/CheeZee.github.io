@@ -55,11 +55,10 @@ angular.module('mxl', ['ui.codemirror'])
                     if($scope.wizard){
                         $scope.wizardQuery = ["find " + $scope.selectedEntity.name];
                         $scope.wizard({expression: $scope.wizardQuery[0]}).then(function(result){
-                            $scope.intermediateResults = [{type: result.type.fullname, preview: result.value}];
+                            $scope.intermediateResults = [{type: result.type.fullname, preview: result.value, unknown: false}];
                             // initialize the first set of functions
                             if($scope.wizardMethodAutocompletion && $scope.intermediateResults != null){
                                 $scope.wizardMethodAutocompletion({restrict: $scope.intermediateResults[0].type}).then(function(result){
-                                    console.log(result.memberFunctions);
                                     $scope.intermediateResults[0].functions = result.memberFunctions;
                                 });
                             }
@@ -71,24 +70,26 @@ angular.module('mxl', ['ui.codemirror'])
                     $scope.codemirror.setValue( $scope.wizardQuery[0]);
                 }
              };
+
             $scope.changeEntity = function(){
                 $scope.changingEntity = true;
             };
             $scope.cancelChange = function(){
                 $scope.changingEntity = false;
             }
+
             // add a new function
             $scope.addFunction = function(){
                 var index = $scope.intermediateResults.length - 1;
                 // initialized the corresponding methods
                 if($scope.wizardMethodAutocompletion && $scope.intermediateResults != null){
                     $scope.wizardMethodAutocompletion({restrict: $scope.intermediateResults[index].type}).then(function(result){
-                        console.log(result.memberFunctions);
                         $scope.intermediateResults[index].functions = result.memberFunctions;
                     });
                 }
                 $scope.intermediateResults[index].config = {};
             }
+
             // when a function is selected
             $scope.selectFunction = function($event, index){
                 if($event.keyCode === 13) {
@@ -117,27 +118,22 @@ angular.module('mxl', ['ui.codemirror'])
 
                     if (mandatoryParameter === 0) {
                         var query = generateQuery(index, -1);
-                        if ($scope.wizard) {
-                            $scope.wizard({expression: query}).then(function (result) {
-                                $scope.intermediateResults[index + 1] = {
-                                    type: result.type.fullname,
-                                    preview: result.value
-                                };
-                                if (result.type.fullname === "Number") {
-                                    $scope.endOfWizard = true;
-                                } else {
-                                    $scope.endOfWizard = false;
-                                }
-                            });
-                        }
                         // set the codemirror content
                         $scope.codemirror.setValue(query);
+
+                        if ($scope.wizard) {
+                            $scope.wizard({expression: query}).then(function (result) {
+                                setNewIntermediateResult(result, index);
+                            }, function (result) {
+                                setNewIntermediateResult(result, index);
+                            });
+                        }
+
                     }
                 }
             }
             // when a parameter is passed
             $scope.setParameter = function($event, resIndex, paraIndex, isOptional){
-                console.log($event.keyCode);
                 if($event.keyCode === 10) {
                     if (isOptional == false) {
                         if ($scope.intermediateResults[resIndex].config.parameters[paraIndex] != "") {
@@ -214,36 +210,50 @@ angular.module('mxl', ['ui.codemirror'])
                 return query;
             }
 
+            // using for the loop in the updateParameter function
+            function updateLoop(i, resIndex, error) {
+                if (i < $scope.intermediateResults.length - 1) {
+                    console.log("update intermediate result No." + (i + 1) + " of " + $scope.intermediateResults.length);
+                    console.log(error);
+                    if (error === true) {
+                        $scope.intermediateResults[i + 1].type = "Unknown";
+                        $scope.intermediateResults[i + 1].unknown = true;
+                        updateLoop(i + 1, resIndex, error);
+                    } else {
+                        if ($scope.intermediateResults[i + 1].unknown == true) {
+                            $scope.intermediateResults[i + 1].unknown = false;
+                        }
+                        var query = ""
+                        if (i === resIndex) {
+                            // update the parameters
+                            query = generateQuery(i, i + 1);
+                        } else if ($scope.intermediateResults[i].config != null &&
+                            $scope.intermediateResults[i].config.selectedFunction != null) {
+                            // re-generate the following intermediate results
+                            // when they have a selected function
+                            query = generateQuery(-1, i + 1);
+                        }
+                        $scope.wizard({expression: query}).then(function (result) {
+                            error = updateIntermediateResult(result, i);
+                            updateLoop(i + 1, resIndex, error);
+                        }, function (result) {
+                            error = updateIntermediateResult(result, i);
+                            updateLoop(i + 1, resIndex, error);
+                        });
+                    }
+                }
+            }
+
             // this function is used to update when an existing parameter changes
             function updateParameter(resIndex){
                 console.log("update parameter " + resIndex + ": " + $scope.intermediateResults[resIndex].config.parameters);
                 // update all the intermediate result afterwards
                 var error = false;
-                for(var i = resIndex; i < $scope.intermediateResults.length; i++){
-                    var query = ""
-                    if(i === resIndex) {
-                        // update the parameters
-                        query = generateQuery(i, i + 1);
-                    }else if($scope.intermediateResults.selectedFunction != null){
-                        // re-generate the following intermediate results
-                        // when they have a selected function
-                        query = generateQuery(-1, i + 1);
-                    }
-                    $scope.wizard({expression: query}).then(function (result) {
-                        error = updateIntermediateResult(result, resIndex);
-                    }, function (result) {
-                        error = updateIntermediateResult(result, resIndex);
-                    });
-
-                    if(error === true){
-                        break;
-                    }
-                }
+                updateLoop(resIndex, resIndex, error);
             }
 
             // this function is usd to update an intermediate result
             function updateIntermediateResult(result, resIndex){
-                console.log(result);
                 if(result.statusCode >= 400) {
                     $scope.intermediateResults[resIndex + 1].wizardError = result.message;
                     return true;
@@ -255,13 +265,7 @@ angular.module('mxl', ['ui.codemirror'])
                     if($scope.intermediateResults[resIndex + 1] != null){
                         $scope.intermediateResults[resIndex + 1].type = result.type.fullname;
                         $scope.intermediateResults[resIndex + 1].preview = result.value;
-                        // generate the next function set
-                        if($scope.wizardMethodAutocompletion && $scope.intermediateResults != null){
-                            $scope.wizardMethodAutocompletion({restrict: $scope.intermediateResults[resIndex + 1].type}).then(function(result){
-                                console.log(result.memberFunctions);
-                                $scope.intermediateResults[resIndex + 1].functions = result.memberFunctions;
-                            });
-                        }
+                        $scope.intermediateResults[resIndex + 1].unknown = false;
                     }
                     return false;
                 }
@@ -269,7 +273,7 @@ angular.module('mxl', ['ui.codemirror'])
 
             // this function is used set a new intermediate result
             function setNewIntermediateResult(result, index){
-                console.log("set new intermediate result");
+                console.log("set new intermediate result: " + (index + 1));
                 // when there is an error
                 if(result.statusCode >= 400){
                     if($scope.intermediateResults[index + 1] != null){
@@ -284,21 +288,21 @@ angular.module('mxl', ['ui.codemirror'])
                     }
                     $scope.intermediateResults[index + 1] = {
                         type: result.type.fullname,
-                        preview: result.value
+                        preview: result.value,
+                        unknown: false
                     };
                     if (result.type.fullname === "Number") {
                         $scope.endOfWizard = true;
                     } else {
                         $scope.endOfWizard = false;
+                        // generate the next function set
+                        if($scope.wizardMethodAutocompletion && $scope.intermediateResults != null){
+                            $scope.wizardMethodAutocompletion({restrict: $scope.intermediateResults[index + 1].type}).then(function(result){
+                                $scope.intermediateResults[index + 1].functions = result.memberFunctions;
+                            });
+                        }
+                        $scope.intermediateResults[index + 1].config = {};
                     }
-                    // generate the next function set
-                    if($scope.wizardMethodAutocompletion && $scope.intermediateResults != null){
-                        $scope.wizardMethodAutocompletion({restrict: $scope.intermediateResults[index + 1].type}).then(function(result){
-                            console.log(result.memberFunctions);
-                            $scope.intermediateResults[index + 1].functions = result.memberFunctions;
-                        });
-                    }
-                    $scope.intermediateResults[index + 1].config = {};
                 }
             }
 

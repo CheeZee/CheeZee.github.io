@@ -61,6 +61,9 @@
                         </div>
                     </div>
                 </div>
+                <div class="loading selection" ng-if="selectedEntity != null && intermediateResults == null">
+                    <i class="fa fa-spinner fa-pulse fa-3x"></i>
+                </div>
                 <div id="main-wizard" ng-hide="intermediateResults == null">
                     <div ng-repeat="result in intermediateResults">
                         <mxl-intermediate></mxl-intermediate>
@@ -74,6 +77,7 @@
                     </div>-->
 
                 </div>
+
             </div>
         </div>
     </div>
