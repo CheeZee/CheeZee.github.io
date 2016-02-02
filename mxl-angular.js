@@ -187,6 +187,11 @@ angular.module('mxl', ['ui.codemirror'])
                 }
             };
 
+            // this function is used to insert a step
+            $scope.insertStep = function(index){
+                console.log("insert step after: " + index);
+            }
+
             // this function is used to remove one of the steps
             $scope.removeStep = function(index){
                 console.log("Remove step: " + index);
@@ -194,17 +199,24 @@ angular.module('mxl', ['ui.codemirror'])
                 for(var i = index; i < $scope.intermediateResults.length - 1; i++){
                     if($scope.intermediateResults[i + 1]) {
                         $scope.intermediateResults[i].config = $scope.intermediateResults[i + 1].config;
-                        if($scope.intermediateResults[i + 1].functions == null) {
+                        if(i < $scope.intermediateResults.length - 2 && $scope.intermediateResults[i + 1].functions == null) {
                             $scope.intermediateResults[i].functions = null;
                         }
                     }
                 }
-                // remove the last intermediate result and last part of the query
-                $scope.intermediateResults.pop();
-                $scope.wizardQuery.pop();
-                // update the parameters and the queries
-                updateQuery();
-                updateParameter(index);
+                if($scope.intermediateResults.length === 1){
+                    // when there is only one intermediate result
+                    $scope.intermediateResults[i].config.selectedFunction = null;
+                    $scope.intermediateResults[i].config.functionName = null;
+                }else{
+                    // remove the last intermediate result and last part of the query
+                    $scope.intermediateResults.pop();
+                    $scope.wizardQuery.pop();
+                    // update the parameters and the queries
+                    updateQuery();
+                    updateParameter(index);
+                }
+                console.log($scope.intermediateResults);
             };
 
             // this function is used to update the whole query
@@ -227,6 +239,8 @@ angular.module('mxl', ['ui.codemirror'])
                     $scope.wizardQuery[i + 1] += ")";
                     console.log("query part" + i + ":" + $scope.wizardQuery[i + 1]);
                 }
+                console.log("Query update result: ");
+                console.log($scope.wizardQuery);
             }
 
             // this function is used to generate a query
@@ -307,7 +321,7 @@ angular.module('mxl', ['ui.codemirror'])
 
             // this function is used to update when an existing parameter changes
             function updateParameter(resIndex){
-                console.log("update parameter " + resIndex + ": " + $scope.intermediateResults[resIndex].config.parameters);
+                console.log("update parameter of intermediate result: " + resIndex);
                 // update all the intermediate result afterwards
                 var error = false;
                 updateLoop(resIndex, resIndex, error);

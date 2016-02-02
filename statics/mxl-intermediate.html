@@ -53,3 +53,8 @@
         </div>
     </div>
 </div>
+<div class="row intermediate selection" ng-init="show=false">
+    <div class="col-md-12 insert-step" ng-mouseenter="show=true" ng-mouseleave="show=false" ng-click="insertStep($index)">
+        <span title="Insert a step" ng-show="show && result.config.selectedFunction"><i class="fa fa-plus-circle fa-2x"></i></span>
+    </div>
+</div>
