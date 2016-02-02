@@ -189,6 +189,7 @@ angular.module('mxl', ['ui.codemirror'])
 
             // this function is used to remove one of the steps
             $scope.removeStep = function(index){
+                console.log("Remove step: " + index);
                 // re-assign all the configurations of intermediate results
                 for(var i = index; i < $scope.intermediateResults.length - 1; i++){
                     if($scope.intermediateResults[i + 1]) {
@@ -198,11 +199,35 @@ angular.module('mxl', ['ui.codemirror'])
                         }
                     }
                 }
+                // remove the last intermediate result and last part of the query
                 $scope.intermediateResults.pop();
-                // update the parameters
+                $scope.wizardQuery.pop();
+                // update the parameters and the queries
+                updateQuery();
                 updateParameter(index);
-                console.log("length: " + $scope.intermediateResults.length);
             };
+
+            // this function is used to update the whole query
+            function updateQuery(){
+                console.log("updating the query");
+                $scope.wizardQuery = ["find " + $scope.selectedEntity.name];
+                for(var i = 0; i < $scope.intermediateResults.length - 1; i++){
+                    $scope.wizardQuery[i + 1] = "\n  ." + $scope.intermediateResults[i].config.selectedFunction.name + "(";
+
+                    var length = $scope.intermediateResults[i].config.parameters.length;
+                    for (var f = 0; f < length; f++) {
+                        if ($scope.intermediateResults[i].config.parameters[f] != null) {
+                            if (f === 0) {
+                                $scope.wizardQuery[i + 1] += $scope.intermediateResults[i].config.parameters[f];
+                            } else {
+                                $scope.wizardQuery[i + 1] += "," + $scope.intermediateResults[i].config.parameters[f];
+                            }
+                        }
+                    }
+                    $scope.wizardQuery[i + 1] += ")";
+                    console.log("query part" + i + ":" + $scope.wizardQuery[i + 1]);
+                }
+            }
 
             // this function is used to generate a query
             // endIndex is used to generate only a part of the query
@@ -251,7 +276,6 @@ angular.module('mxl', ['ui.codemirror'])
             function updateLoop(i, resIndex, error) {
                 if (i < $scope.intermediateResults.length - 1) {
                     console.log("update intermediate result No." + (i + 1) + " of " + $scope.intermediateResults.length);
-                    console.log(error);
                     if (error === true) {
                         $scope.intermediateResults[i + 1].type = "Unknown";
                         $scope.intermediateResults[i + 1].unknown = true;
