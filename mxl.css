@@ -348,6 +348,16 @@
     color: black;
 }
 
+.parameters-label {
+    padding: 5px 0 0 0;
+}
+.parameters-label label{
+    vertical-align: middle;
+}
+.parameters-input{
+    padding: 5px 15px 0 0;
+}
+
 .insert-step:hover{
     cursor: pointer;
 }

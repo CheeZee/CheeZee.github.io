@@ -171,7 +171,7 @@ angular.module('mxl', ['ui.codemirror'])
 
             $scope.paraCMOptions = {
                 autofocus: true,
-                placeholder: 'Press Ctrl+Enter to confirm the input',
+                placeholder: 'Ctrl+Enter to confirm',
                 lineWrapping: true,
                 matchBrackets: true,
                 autoCloseBrackets: true,

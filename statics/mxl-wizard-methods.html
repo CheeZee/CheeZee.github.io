@@ -4,35 +4,42 @@
             <p>{{$index+2}}</p>
         </div>
         <div class="col-md-11 back-padding">
-            <div class="">
-                <div class="">
-                    <input id="method-{{$index}}" class="form-control" list="functions-{{$index}}"
-                           ng-keypress="selectFunction($event, $index)" autofocus
-                           ng-model="result.config.functionName">
-                    <datalist id="functions-{{$index}}">
-                        <option ng-repeat="function in result.functions" value="{{function.name}}">
-                            <a href="" title="{{function.description}}"></a></option>
-                    </datalist>
-                </div>
-            </div>
+
+            <input id="method-{{$index}}" class="form-control" list="functions-{{$index}}"
+                   ng-keypress="selectFunction($event, $index)" autofocus
+                   ng-model="result.config.functionName">
+            <datalist id="functions-{{$index}}">
+                <option ng-repeat="function in result.functions" value="{{function.name}}">
+                    <a href="" title="{{function.description}}"></a>
+                </option>
+            </datalist>
+
             <div id="parameters-{{$index}}" ng-repeat="parameter in result.config.selectedFunction.parameters">
                 <div ng-if="parameter.isOptional == false" >
+
+                    <div class="row row-margin">
                         <div ng-class="{'has-error' : !result.config.parameters[$index] }" >
-                            <div align="left">
-                            <label class="control-label" ><b>Mandatory</b> Parameter: {{parameter.name}}</label>
-                                </div>
-                            <ui-codemirror id="parameter-{{$index}}" ui-codemirror-opts="paraCMOptions"
-                                           ng-keypress="setParameter($event, intermediateResults.indexOf(result), $index, parameter.isOptional)"
-                                           ng-model="result.config.parameters[$index]"></ui-codemirror>
-                            <!--<input id="parameter-{{$index}}" type="text" class="form-control" placeholder="Name: {{parameter.name}}, Type: {{parameter.type}}"
-                                   ng-model="result.config.parameters[$index]"
-                                   ng-keypress="setParameter($event, intermediateResults.indexOf(result), $index, parameter.isOptional)">-->
+                            <div class="col-md-4 parameters-label">
+                                <label class="control-label"><b>*</b> {{parameter.name}}:</label>
+                            </div>
+                            <div class="col-md-8 parameters-input">
+                                <ui-codemirror id="parameter-{{$index}}" ui-codemirror-opts="paraCMOptions"
+                                               ng-keypress="setParameter($event, intermediateResults.indexOf(result), $index, parameter.isOptional)"
+                                               ng-model="result.config.parameters[$index]"></ui-codemirror>
+                                    <!--<input id="parameter-{{$index}}" type="text" class="form-control" placeholder="Name: {{parameter.name}}, Type: {{parameter.type}}"
+                                           ng-model="result.config.parameters[$index]"
+                                           ng-keypress="setParameter($event, intermediateResults.indexOf(result), $index, parameter.isOptional)">-->
+                            </div>
                         </div>
                     </div>
+
+                </div>
                 <div ng-if="parameter.isOptional == true">
-                    <div align="left">
-                    <label class="control-label" ><b>Optional</b> Parameter: {{parameter.name}}</label>
-                    </div>
+                    <form class="row row-margin">
+                        <div class="col-md-4 parameters-label">
+                            <label class="control-label">{{parameter.name}}:</label>
+                        </div>
+                        <div class="col-md-8 parameters-input">
                             <ui-codemirror id="parameter-{{$index}}" ui-codemirror-opts="paraCMOptions"
                                            ng-keypress="setParameter($event, intermediateResults.indexOf(result), $index, parameter.isOptional)"
                                            ng-model="result.config.parameters[$index]"></ui-codemirror>
@@ -40,6 +47,8 @@
                                    ng-model="result.config.parameters[$index]"
                                    ng-keypress="setParameter($event, intermediateResults.indexOf(result), $index, parameter.isOptional)">-->
 
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
