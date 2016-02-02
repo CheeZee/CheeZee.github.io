@@ -76,7 +76,7 @@ angular.module('mxl', ['ui.codemirror'])
             };
             $scope.cancelChange = function(){
                 $scope.changingEntity = false;
-            }
+            };
 
             // add a new function
             $scope.addFunction = function(){
@@ -88,19 +88,20 @@ angular.module('mxl', ['ui.codemirror'])
                     });
                 }
                 $scope.intermediateResults[index].config = {};
-            }
+            };
 
             // when a function is selected
             $scope.selectFunction = function($event, index){
                 if($event.keyCode === 13) {
                     // get the function
-                    var input = document.querySelector("#method-"+index);
-                    console.log(input.value);
+                    //var input = document.querySelector("#method-"+index);
+                    console.log($scope.intermediateResults[index].config.functionName);
                     if($scope.intermediateResults[index].config === null){
                         $scope.intermediateResults[index].config = {};
                     }
                     for(var i = 0;  i < $scope.intermediateResults[index].functions.length; i++){
-                        if($scope.intermediateResults[index].functions[i].name === input.value){
+                        if($scope.intermediateResults[index].functions[i].name ===
+                            $scope.intermediateResults[index].config.functionName){
                             $scope.intermediateResults[index].config.selectedFunction = $scope.intermediateResults[index].functions[i];
                             break;
                         }
@@ -131,7 +132,8 @@ angular.module('mxl', ['ui.codemirror'])
 
                     }
                 }
-            }
+            };
+
             // when a parameter is passed
             $scope.setParameter = function($event, resIndex, paraIndex, isOptional){
                 if($event.keyCode === 10) {
@@ -165,7 +167,42 @@ angular.module('mxl', ['ui.codemirror'])
                         }
                     }
                 }
-            }
+            };
+
+            $scope.paraCMOptions = {
+                autofocus: true,
+                placeholder: 'Press Ctrl+Enter to confirm the input',
+                lineWrapping: true,
+                matchBrackets: true,
+                autoCloseBrackets: true,
+                highlightSelectionMatches: { showToken: /\w/ },
+                viewportMargin: Infinity,
+                readOnly: false,
+                mode: 'mxl',
+                gutters: ["CodeMirror-lint-markers"],
+                lint: true,
+                theme: 'mxl',
+                extraKeys: {
+                    "Ctrl-Space": "autocomplete"
+                }
+            };
+
+            // this function is used to remove one of the steps
+            $scope.removeStep = function(index){
+                // re-assign all the configurations of intermediate results
+                for(var i = index; i < $scope.intermediateResults.length - 1; i++){
+                    if($scope.intermediateResults[i + 1]) {
+                        $scope.intermediateResults[i].config = $scope.intermediateResults[i + 1].config;
+                        if($scope.intermediateResults[i + 1].functions == null) {
+                            $scope.intermediateResults[i].functions = null;
+                        }
+                    }
+                }
+                $scope.intermediateResults.pop();
+                // update the parameters
+                updateParameter(index);
+                console.log("length: " + $scope.intermediateResults.length);
+            };
 
             // this function is used to generate a query
             // endIndex is used to generate only a part of the query
@@ -305,24 +342,6 @@ angular.module('mxl', ['ui.codemirror'])
                     }
                 }
             }
-
-            $scope.paraCMOptions = {
-                autofocus: true,
-                placeholder: 'Please press Ctrl+Enter to confirm the input',
-                lineWrapping: true,
-                matchBrackets: true,
-                autoCloseBrackets: true,
-                highlightSelectionMatches: { showToken: /\w/ },
-                viewportMargin: Infinity,
-                readOnly: false,
-                mode: 'mxl',
-                gutters: ["CodeMirror-lint-markers"],
-                lint: true,
-                theme: 'mxl',
-                extraKeys: {
-                    "Ctrl-Space": "autocomplete"
-                }
-            };
             /*
             * Above are the wizard related functions
             */
