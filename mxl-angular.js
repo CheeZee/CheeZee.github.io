@@ -6,7 +6,7 @@ angular.module('mxl', ['ui.codemirror'])
     type: "type",
     parameteres: "parameters"
 })
-.directive('mxlExpression', function ($timeout, $q, mxlModes) {
+.directive('mxlExpression', function ($timeout, $q, $sce, $compile, mxlModes) {
     return {
         templateUrl: 'statics/mxl-template.html',
         require: ["^ngModel"],
@@ -106,6 +106,17 @@ angular.module('mxl', ['ui.codemirror'])
                             break;
                         }
                     }
+                    //$scope.bindFunctionDescriptionAsHtml = $compile($scope.intermediateResults[index].config.selectedFunction.description);
+                    //console.log($scope.bindFunctionDescriptionAsHtml);
+
+                    //$scope.bindFunctionDescriptionAsHtml = "<span title=" + $scope.bindFunctionDescriptionAsHtml + ">i</span>";
+                    //console.log($scope.bindFunctionDescriptionAsHtml);
+                    //
+                    //$scope.bindFunctionDescriptionAsHtml = $sce.trustAsHtml($scope.bindFunctionDescriptionAsHtml);
+                    $scope.bindFunctionDescriptionAsHtml = $sce.trustAsHtml("<span title='"+ $scope.intermediateResults[index].config.selectedFunction.description+"'> i </span>");
+                    console.log($scope.bindFunctionDescriptionAsHtml);
+
+
                     var mandatoryParameter = 0;
                     var length = $scope.intermediateResults[index].config.selectedFunction.parameters.length;
                     for (var i = 0; i < length; i++) {
@@ -648,4 +659,53 @@ angular.module('mxl', ['ui.codemirror'])
         scope: false,
         link: function($scope, $element, $attrs){}
     }
+})
+.directive('tooltip', function () {
+    return {
+        restrict:'A',
+        link: function(scope, element, attrs)
+        {
+            $(element)
+                .attr('title',scope.$eval(attrs.tooltip))
+                .tooltip({placement: "right"});
+        }
+    }
+})
+.directive('popOver', function ($compile) {
+    var itemsTemplate = "<ul class='unstyled'><li ng-repeat='item in items'>{{item}}</li></ul>";
+    var getTemplate = function (contentType) {
+        var template = '';
+        switch (contentType) {
+            case 'items':
+                template = itemsTemplate;
+                break;
+        }
+        return template;
+    }
+    return {
+        restrict: "A",
+        transclude: true,
+        template: "<span ng-transclude></span>",
+        link: function (scope, element, attrs) {
+            var popOverContent;
+
+            console.log("Outer");
+            console.log(scope.describe);
+            if (scope.describe) {
+                console.log(scope.describe);
+                var html = scope.describe;
+                popOverContent = $compile(html)(scope);
+            }
+            var options = {
+                content: popOverContent,
+                placement: "bottom",
+                html: true,
+                title:"Description"
+            };
+            $(element).popover(options);
+        },
+        scope:{
+            describe: '='
+        }
+    };
 });

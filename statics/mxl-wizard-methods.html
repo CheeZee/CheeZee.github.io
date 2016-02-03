@@ -10,9 +10,14 @@
                    ng-model="result.config.functionName">
             <datalist id="functions-{{$index}}">
                 <option ng-repeat="function in result.functions" value="{{function.name}}">
-                    <a href="" title="{{function.description}}"></a>
                 </option>
             </datalist>
+            <!--<div  ng-bind-html="bindFunctionDescriptionAsHtml" ></div>-->
+            <div ng-if="result.config.selectedFunction">
+                <a href="#" pop-over describe="result.config.selectedFunction.description" title="Mode of transport">Show Pop over</a>
+            </div>
+            <!--<span><title ng-bind-html="bindFunctionDescriptionAsHtml"></title>Description</span>-->
+
 
             <div id="parameters-{{$index}}" ng-repeat="parameter in result.config.selectedFunction.parameters">
                 <div ng-if="parameter.isOptional == false" >
