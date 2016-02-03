@@ -190,6 +190,12 @@ angular.module('mxl', ['ui.codemirror'])
             // this function is used to insert a step
             $scope.insertStep = function(index){
                 console.log("insert step after: " + index);
+                var functions = $scope.intermediateResults[index].functions;
+                var config = $scope.intermediateResults[index].config;
+                $scope.intermediateResults[index].config = {};
+                var newIntermediate = {type: 'Unknown', unknown: true, preview: null, functions: functions, config: config};
+                $scope.intermediateResults.splice(index + 1, 0, newIntermediate);
+                $scope.wizardQuery.splice(index + 1, 0, "");
             }
 
             // this function is used to remove one of the steps
