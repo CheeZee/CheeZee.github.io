@@ -5,6 +5,7 @@
         </div>
         <div class="col-md-11 back-padding">
 
+            <div class="col-md-9 zero-padding">
             <input id="method-{{$index}}" class="form-control" list="functions-{{$index}}"
                    ng-keypress="selectFunction($event, $index)" autofocus
                    ng-model="result.config.functionName">
@@ -12,9 +13,13 @@
                 <option ng-repeat="function in result.functions" value="{{function.name}}">
                 </option>
             </datalist>
+            </div>
+            <div class="col-md-2 zero-padding">
             <!--<div  ng-bind-html="bindFunctionDescriptionAsHtml" ></div>-->
             <div ng-if="result.config.selectedFunction">
-                <a href="#" pop-over describe="result.config.selectedFunction.description" title="Mode of transport">Show Pop over</a>
+                <button class="btn btn-primary" type="button" pop-over describe="result.config.selectedFunction.description" title="Description"><span class="fa fa-info-circle"></span></button>
+
+            </div>
             </div>
             <!--<span><title ng-bind-html="bindFunctionDescriptionAsHtml"></title>Description</span>-->
 

@@ -698,7 +698,7 @@ angular.module('mxl', ['ui.codemirror'])
             }
             var options = {
                 content: popOverContent,
-                placement: "bottom",
+                placement: "right",
                 html: true,
                 title:"Description"
             };
