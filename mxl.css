@@ -292,6 +292,14 @@
 .inter-info{
     padding: 0;
 }
+
+.info-div {
+    height: 34px;
+}
+.info-icon{
+    vertical-align: -50%;
+}
+
 .arrow{
     background-color: #bbb;
     height: 39px;
@@ -340,12 +348,11 @@
 }
 
 .remove-step {
-    color: #eeeeee;
-    padding-top: 5px;
+    padding-right: 0;
+    margin-right: 0;
 }
 .remove-step:hover {
     cursor: pointer;
-    color: black;
 }
 
 .parameters-label {
@@ -355,6 +362,7 @@
 .zero-padding {
     padding: 0 0 0 0;
 }
+
 
 .parameters-label label{
     vertical-align: middle;
