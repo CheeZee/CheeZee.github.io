@@ -115,6 +115,7 @@ angular.module('mxl', ['ui.codemirror'])
                     //$scope.bindFunctionDescriptionAsHtml = $sce.trustAsHtml($scope.bindFunctionDescriptionAsHtml);
                     $scope.bindFunctionDescriptionAsHtml = $sce.trustAsHtml("<span title='"+ $scope.intermediateResults[index].config.selectedFunction.description+"'> i </span>");
                     console.log($scope.bindFunctionDescriptionAsHtml);
+                    //$scope.$apply();
 
 
                     var mandatoryParameter = 0;
@@ -689,20 +690,30 @@ angular.module('mxl', ['ui.codemirror'])
         link: function (scope, element, attrs) {
             var popOverContent;
 
-            console.log("Outer");
-            console.log(scope.describe);
+
+        var changeInput = function(newVal) {
             if (scope.describe) {
                 console.log(scope.describe);
                 var html = scope.describe;
                 popOverContent = $compile(html)(scope);
             }
             var options = {
-                content: popOverContent,
+                content: function(){
+                    var contentForThis = popOverContent;
+                    return contentForThis;
+                },
                 placement: "right",
                 html: true,
-                title:"Description"
+                title: "Description"
             };
             $(element).popover(options);
+
+
+        }
+           // changeInput();
+            scope.$watch("describe", function (newVal) {
+                changeInput(newVal);
+            }, true);
         },
         scope:{
             describe: '='
