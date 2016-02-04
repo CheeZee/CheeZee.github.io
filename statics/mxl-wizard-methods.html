@@ -1,6 +1,6 @@
 <div class="step">
     <div class="row row-margin row-md-height">
-        <div class="col-md-1 col-md-height step-number" ng-class="{'unfinished':!result.config.selectedFunction}">
+        <div class="col-md-1 col-md-height step-number" ng-class="{'unfinished':(!result.config.selectedFunction || result.wizardError != null || result.unknown == true)}">
             <p>{{$index+2}}</p>
         </div>
         <div class="col-md-12 back-padding">
