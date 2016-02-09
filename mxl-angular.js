@@ -159,10 +159,10 @@ angular.module('mxl', ['ui.codemirror'])
                         }
                     }
                     if ($scope.intermediateResults[resIndex].config.unfilledMandatoryParameters === 0) {
-
                         // first check if it is a new parameter or an update
                         if($scope.intermediateResults[resIndex + 1] != null){
                             // when it is an update for existing configurations
+                            $scope.intermediateResults[resIndex + 1].waiting = true;
                             updateParameter(resIndex);
                         }else {
                             // when it is a new parameter
@@ -176,6 +176,8 @@ angular.module('mxl', ['ui.codemirror'])
                             }, function (result) {
                                 setNewIntermediateResult(result, resIndex);
                             });
+                            $scope.intermediateResults[resIndex + 1] = {};
+                            $scope.intermediateResults[resIndex + 1].waiting = true;
                         }
                     }
                 }
@@ -334,14 +336,16 @@ angular.module('mxl', ['ui.codemirror'])
                             updateLoop(i + 1, resIndex, error);
                         });
                     }
-                }else if(i === $scope.intermediateResults.length - 1 &&
-                    $scope.intermediateResults[i].functions == null &&
-                    $scope.endOfWizard === false){
-                    // when it is the last one of the intermediate result and isn't the end of the query and doesn't have functions yet
-                    // generate the functions for it
-                    $scope.wizardMethodAutocompletion({restrict: $scope.intermediateResults[i].type}).then(function(result){
-                        $scope.intermediateResults[i].functions = result.memberFunctions;
-                    });
+                }else if(i === $scope.intermediateResults.length - 1){
+                    $scope.intermediateResults[resIndex + 1].waiting = false;
+                    if($scope.intermediateResults[i].functions == null &&
+                        $scope.endOfWizard === false) {
+                        // when it is the last one of the intermediate result and isn't the end of the query and doesn't have functions yet
+                        // generate the functions for it
+                        $scope.wizardMethodAutocompletion({restrict: $scope.intermediateResults[i].type}).then(function (result) {
+                            $scope.intermediateResults[i].functions = result.memberFunctions;
+                        });
+                    }
                 }
             }
 
@@ -405,6 +409,7 @@ angular.module('mxl', ['ui.codemirror'])
                         $scope.intermediateResults[index + 1].config = {};
                     }
                 }
+                $scope.intermediateResults[index + 1].waiting = false;
             }
             /*
             * Above are the wizard related functions

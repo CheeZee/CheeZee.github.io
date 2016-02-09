@@ -1,5 +1,8 @@
+<div class="loading selection" ng-if="result.waiting === true">
+    <i class="fa fa-spinner fa-pulse fa-3x"></i>
+</div>
 <div class="row intermediate selection">
-    <div ng-if="result.wizardError == null">
+    <div ng-if="(result.waiting == null || result.waiting === false ) && result.wizardError == null">
         <div class="col-md-1 col-md-offset-1 inter-info">
             <div class="arrow pull-right" ng-if="result.unknown == true">
                 <span><i class="fa fa-question fa-lg"></i></span>
@@ -20,7 +23,7 @@
                     <div class="panel-body">
                         <div ng-if="result.type.lastIndexOf('Sequence', 0) === 0">
                             <ul>
-                                <li  ng-repeat="item in result.preview | limitTo: 5">
+                                <li  ng-repeat="item in result.preview | limitTo: 5 track by $index">
                                     <span ng-if="item.name">{{ item.name }}</span>
                                     <span ng-if="!item.name">{{item}}</span>
                                 </li>
