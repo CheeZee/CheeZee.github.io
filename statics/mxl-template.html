@@ -4,18 +4,18 @@
         <nav class="nav navbar-nav">
             <ul class="nav nav-pills nav-stacked" id="tabs" role="tablist">
                 <li role="presentation" class="active">
-                    <a href="#pro-editor" data-toggle="pill"><i class="fa fa-code fa-lg"></i></a>
+                    <a href="#pro-editor-{{id}}" data-toggle="pill"><i class="fa fa-code fa-lg"></i></a>
                 </li>
                 <li role="presentation">
-                    <a href="#wizard" data-toggle="pill"><i class="fa fa-magic fa-lg"></i></a>
+                    <a href="#wizard-{{id}}" data-toggle="pill"><i class="fa fa-magic fa-lg"></i></a>
                 </li>
             </ul>
         </nav>
         <div class="col-md-10 tab-content">
-            <div id="pro-editor" class="tab-pane fade in active">
+            <div id="pro-editor-{{id}}" class="pro-editor tab-pane fade in active">
                 <editor></editor>
             </div>
-            <div id="wizard" class="tab-pane fade">
+            <div id="wizard-{{id}}" class="tab-pane fade">
                 <div class="selection" ng-show="selectedEntity == null || changingEntity">
                     <div class="step">
                         <div class="row row-md-height row-margin">

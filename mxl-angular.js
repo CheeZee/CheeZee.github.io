@@ -29,7 +29,8 @@ angular.module('mxl', ['ui.codemirror'])
                 intermediateResults: "@",
                 wizardMethodAutocompletion: "&mxlWizardMethod",
                 wizardConfig: '=',
-                addFunction: '@'
+                addFunction: '@',
+                id: '@'
             },
         controller: function($scope){
             return $scope;

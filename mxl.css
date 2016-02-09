@@ -220,7 +220,7 @@
     cursor: pointer;
 }
 
-.selection, #pro-editor{
+.selection, .pro-editor{
     background-color: #eee;
     padding-top: 1px;
     padding-bottom: 1px;
@@ -238,7 +238,7 @@
     cursor: pointer;
 }
 
-#pro-editor {
+.pro-editor {
     padding: 10px 10px 30px 10px;
 }
 
