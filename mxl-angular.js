@@ -141,6 +141,8 @@ angular.module('mxl', ['ui.codemirror'])
                                 setNewIntermediateResult(result, index);
                             });
                         }
+                        $scope.intermediateResults[index + 1] = {};
+                        $scope.intermediateResults[index + 1].waiting = true;
 
                     }
                 }
@@ -338,6 +340,10 @@ angular.module('mxl', ['ui.codemirror'])
                     }
                 }else if(i === $scope.intermediateResults.length - 1){
                     $scope.intermediateResults[resIndex + 1].waiting = false;
+                    if($scope.intermediateResults[i].type.fullname !== "Number" &&
+                        $scope.intermediateResults[i].type.fullname !== 'String'){
+                        $scope.endOfWizard = false;
+                    }
                     if($scope.intermediateResults[i].functions == null &&
                         $scope.endOfWizard === false) {
                         // when it is the last one of the intermediate result and isn't the end of the query and doesn't have functions yet
