@@ -120,10 +120,13 @@ angular.module('mxl', ['ui.codemirror'])
 
 
                     var mandatoryParameter = 0;
-                    var length = $scope.intermediateResults[index].config.selectedFunction.parameters.length;
-                    for (var i = 0; i < length; i++) {
-                        if ($scope.intermediateResults[index].config.selectedFunction.parameters[i].isOptional == false) {
-                            mandatoryParameter++;
+                    var length = 0;
+                    if($scope.intermediateResults[index].config.selectedFunction.parameters){
+                        length = $scope.intermediateResults[index].config.selectedFunction.parameters.length;
+                        for (var i = 0; i < length; i++) {
+                            if ($scope.intermediateResults[index].config.selectedFunction.parameters[i].isOptional == false) {
+                                mandatoryParameter++;
+                            }
                         }
                     }
 
