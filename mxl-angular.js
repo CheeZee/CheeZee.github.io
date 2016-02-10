@@ -240,6 +240,8 @@ angular.module('mxl', ['ui.codemirror'])
                     $scope.wizardQuery.pop();
                     // update the parameters and the queries
                     updateQuery();
+                    var query = generateQuery(-1,-1);
+                    $scope.codemirror.setValue(query);
                     updateParameter(index);
                 }
                 console.log($scope.intermediateResults);
