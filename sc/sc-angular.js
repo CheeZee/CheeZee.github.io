@@ -369,7 +369,7 @@
         function autoComplete(p1, p2, p3, p4) {
             var context, restriction, callback, error;
 
-            if (angular.isUndefined(p1) || angular.isObject(p1)) {
+            if ( angular.isObject(p1)) {
                 context = p1;
 
                 if (angular.isString(p2)) {

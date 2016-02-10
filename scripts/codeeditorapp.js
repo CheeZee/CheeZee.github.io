@@ -7,7 +7,7 @@ ceapp.controller('testController', function ($scope, scMxl, scAuth, scModel) {
     $scope.workspaceId = '107yhdgc7q9u6';
 
 
-    scMxl.autoComplete( $scope.workspaceId).then(function (response) {
+    scMxl.autoComplete( {workspace: {id: $scope.workspaceId}}).then(function (response) {
         $scope.autoCompletionHints = response;
     });
 
