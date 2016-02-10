@@ -64,10 +64,10 @@
                 <div class="loading selection" ng-if="selectedEntity != null && intermediateResults == null">
                     <i class="fa fa-spinner fa-pulse fa-3x"></i>
                 </div>
-                <div id="main-wizard" ng-hide="intermediateResults == null">
+                <div id="main-wizard" ng-if="intermediateResults != null">
                     <div ng-repeat="result in intermediateResults">
                         <mxl-intermediate></mxl-intermediate>
-                        <div class="selection" ng-hide="result.functions == null">
+                        <div class="selection" ng-if="result.functions != null">
                             <mxl-wizard-methods></mxl-wizard-methods>
                         </div>
                     </div>

@@ -115,7 +115,6 @@ angular.module('mxl', ['ui.codemirror'])
                     //
                     //$scope.bindFunctionDescriptionAsHtml = $sce.trustAsHtml($scope.bindFunctionDescriptionAsHtml);
                     $scope.bindFunctionDescriptionAsHtml = $sce.trustAsHtml("<span title='"+ $scope.intermediateResults[index].config.selectedFunction.description+"'> i </span>");
-                    console.log($scope.bindFunctionDescriptionAsHtml);
                     //$scope.$apply();
 
 
@@ -182,13 +181,16 @@ angular.module('mxl', ['ui.codemirror'])
                             }, function (result) {
                                 setNewIntermediateResult(result, resIndex);
                             });
-                            $scope.intermediateResults[resIndex + 1] = {};
-                            $scope.intermediateResults[resIndex + 1].waiting = true;
+                            if($scope.endOfWizard === false){
+                                $scope.intermediateResults[resIndex + 1] = {};
+                                $scope.intermediateResults[resIndex + 1].waiting = true;
+                            }
                         }
                     }
                 }
             };
 
+            // these are the codemirror options for the parameter codemirror editor
             $scope.paraCMOptions = {
                 autofocus: true,
                 placeholder: 'Ctrl+Enter to confirm',
@@ -346,9 +348,11 @@ angular.module('mxl', ['ui.codemirror'])
                     }
                 }else if(i === $scope.intermediateResults.length - 1){
                     $scope.intermediateResults[resIndex + 1].waiting = false;
-                    if($scope.intermediateResults[i].type.fullname !== "Number" &&
-                        $scope.intermediateResults[i].type.fullname !== 'String'){
+                    if($scope.intermediateResults[i].type !== "Number" &&
+                        $scope.intermediateResults[i].type !== 'String'){
                         $scope.endOfWizard = false;
+                    }else{
+                        $scope.endOfWizard = true;
                     }
                     if($scope.intermediateResults[i].functions == null &&
                         $scope.endOfWizard === false) {
@@ -421,7 +425,9 @@ angular.module('mxl', ['ui.codemirror'])
                         $scope.intermediateResults[index + 1].config = {};
                     }
                 }
-                $scope.intermediateResults[index + 1].waiting = false;
+                if( $scope.intermediateResults[index + 1].waiting) {
+                    $scope.intermediateResults[index + 1].waiting = false;
+                }
             }
             /*
             * Above are the wizard related functions
@@ -718,7 +724,6 @@ angular.module('mxl', ['ui.codemirror'])
 
         var changeInput = function(newVal) {
             if (scope.describe) {
-                console.log(scope.describe);
                 var html = scope.describe;
                 popOverContent = $compile(html)(scope);
             }
